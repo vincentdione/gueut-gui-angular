@@ -1,0 +1,47 @@
+<div class="animal-list">
+  <header class="list-header">
+    <div class="header-content">
+      <h1>Mes Animaux</h1>
+      <p class="count">{{ animals.length }} animal{{ animals.length !== 1 ? 'aux' : '' }}</p>
+    </div>
+    <a routerLink="/animals/new" class="btn-add">
+      <span>➕</span> Ajouter un animal
+    </a>
+  </header>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  } @else if (animals.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">🐑</div>
+      <h3>Aucun animal enregistré</h3>
+      <p>Commencez par ajouter votre premier animal</p>
+      <a routerLink="/animals/new" class="btn-primary">Ajouter un animal</a>
+    </div>
+  } @else {
+    <div class="animals-grid">
+      @for (animal of animals; track animal.id) {
+        <a [routerLink]="['/animals', animal.id]" class="animal-card">
+          <div class="card-image">
+            <span class="placeholder-icon">🐑</span>
+          </div>
+          <div class="card-content">
+            <h3>{{ animal.nom }}</h3>
+            <p class="race">{{ animal.race }}</p>
+            <div class="card-footer">
+              <span class="sexe-badge" [class.male]="animal.sexe === 'M'" [class.female]="animal.sexe === 'F'">
+                {{ animal.sexe === 'M' ? '♂' : '♀' }}
+              </span>
+              @if (animal.aVente) {
+                <span class="vente-badge">En vente</span>
+              }
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

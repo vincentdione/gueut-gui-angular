@@ -1,0 +1,90 @@
+<div class="animal-form">
+  <a routerLink="/animals" class="back-link">
+    ← Annuler
+  </a>
+
+  <div class="form-container">
+    <h1>Nouvel Animal</h1>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="nom">Nom *</label>
+        <input
+          type="text"
+          id="nom"
+          name="nom"
+          [(ngModel)]="formData.nom"
+          required
+          placeholder="Nom de l'animal"
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="race">Race *</label>
+          <select id="race" name="race" [(ngModel)]="formData.race" required>
+            <option value="">Sélectionner...</option>
+            @for (race of races; track race.value) {
+              <option [value]="race.value">{{ race.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sexe">Sexe *</label>
+          <select id="sexe" name="sexe" [(ngModel)]="formData.sexe" required>
+            <option value="">Sélectionner...</option>
+            @for (sexe of sexes; track sexe.value) {
+              <option [value]="sexe.value">{{ sexe.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="couleur">Couleur</label>
+          <input
+            type="text"
+            id="couleur"
+            name="couleur"
+            [(ngModel)]="formData.couleur"
+            placeholder="Blanc, Noir, etc."
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="poidsKg">Poids (kg)</label>
+          <input
+            type="number"
+            id="poidsKg"
+            name="poidsKg"
+            [(ngModel)]="formData.poidsKg"
+            min="0"
+            step="0.1"
+            placeholder="0.0"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dateNaissance">Date de naissance</label>
+        <input
+          type="date"
+          id="dateNaissance"
+          name="dateNaissance"
+          [(ngModel)]="formData.dateNaissance"
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="button" routerLink="/animals" class="btn-cancel">
+          Annuler
+        </button>
+        <button type="submit" class="btn-submit">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

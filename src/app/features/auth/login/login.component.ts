@@ -1,0 +1,41 @@
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [FormsModule, RouterLink],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+})
+export class LoginComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  email = '';
+  password = '';
+  loading = false;
+  error = '';
+
+  onSubmit(): void {
+    if (!this.email || !this.password) {
+      this.error = 'Tous les champs sont requis';
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+
+    this.authService.login({ email: this.email, password: this.password }).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err.error?.error || 'Email ou mot de passe incorrect';
+      },
+    });
+  }
+}

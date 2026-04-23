@@ -1,0 +1,48 @@
+<div class="profile">
+  <h1>Mon Profil</h1>
+
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">
+        <span class="avatar-icon">👤</span>
+      </div>
+      <div class="profile-info">
+        <h2>{{ user.nom }}</h2>
+        <p class="email">{{ user.email }}</p>
+        <span class="certification-badge" [attr.data-level]="user.certification">
+          {{ user.certification }}
+        </span>
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <div class="detail-item">
+        <span class="detail-icon">📱</span>
+        <div class="detail-content">
+          <span class="detail-label">Téléphone</span>
+          <span class="detail-value">{{ user.telephone }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-icon">📍</span>
+        <div class="detail-content">
+          <span class="detail-label">Localisation</span>
+          <span class="detail-value">{{ user.localisation }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-icon">📅</span>
+        <div class="detail-content">
+          <span class="detail-label">Membre depuis</span>
+          <span class="detail-value">{{ user.createdAt | date:'longDate' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn-edit">Modifier le profil</button>
+    </div>
+  </div>
+</div>

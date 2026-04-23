@@ -1,0 +1,42 @@
+<div class="marketplace">
+  <header class="marketplace-header">
+    <h1>🐑 Marché aux Animaux</h1>
+    <p class="subtitle">Trouvez vos prochains élevages de qualité</p>
+  </header>
+
+  <section class="filters-section">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Rechercher un animal..."
+        class="search-input"
+      />
+    </div>
+
+    <div class="filter-group">
+      <select [(ngModel)]="selectedRace" class="filter-select">
+        @for (race of races; track race.value) {
+          <option [value]="race.value">{{ race.label }}</option>
+        }
+      </select>
+
+      <select [(ngModel)]="selectedSexe" class="filter-select">
+        @for (sexe of sexes; track sexe.value) {
+          <option [value]="sexe.value">{{ sexe.label }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  <section class="results-section">
+    <div class="empty-state">
+      <div class="empty-icon">🐑</div>
+      <h3>Aucun animal en vente</h3>
+      <p>Les annonces apparaîtront ici lorsqu'elles seront publiées.</p>
+      <a routerLink="/auth/register" class="cta-link">
+        Inscrivez-vous pour vendre vos animaux
+      </a>
+    </div>
+  </section>
+</div>

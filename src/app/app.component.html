@@ -1,0 +1,36 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-content">
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">🐑</span>
+        <span class="logo-text">Gueut-Gui</span>
+      </a>
+
+      <nav class="nav-links">
+        <a routerLink="/marketplace" routerLinkActive="active">Marché</a>
+
+        @if (isLoggedIn) {
+          <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+          <a routerLink="/animals" routerLinkActive="active">Mes Animaux</a>
+          <a routerLink="/profile" routerLinkActive="active" class="user-link">
+            {{ userName }}
+          </a>
+          <button (click)="logout()" class="btn-logout">Déconnexion</button>
+        } @else {
+          <a routerLink="/auth/login" routerLinkActive="active">Connexion</a>
+          <a routerLink="/auth/register" routerLinkActive="active" class="btn-register">
+            Inscription
+          </a>
+        }
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  <footer class="app-footer">
+    <p>© 2026 Gueut-Gui - Plateforme d'élevage de moutons</p>
+  </footer>
+</div>

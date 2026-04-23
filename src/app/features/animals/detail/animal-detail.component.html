@@ -1,0 +1,41 @@
+<div class="animal-detail">
+  <a routerLink="/animals" class="back-link">
+    ← Retour à mes animaux
+  </a>
+
+  @if (!animal) {
+    <div class="loading">
+      <p>Chargement des détails...</p>
+    </div>
+  } @else {
+    <div class="detail-content">
+      <header class="detail-header">
+        <div class="animal-image">
+          <span class="placeholder-icon">🐑</span>
+        </div>
+        <div class="animal-info">
+          <h1>{{ animal.nom }}</h1>
+          <p class="race">{{ animal.race }}</p>
+        </div>
+      </header>
+
+      <section class="info-section">
+        <h2>Informations</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Sexe</span>
+            <span class="value">{{ animal.sexe }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Date de naissance</span>
+            <span class="value">{{ animal.dateNaissance || 'Non renseignée' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Poids</span>
+            <span class="value">{{ animal.poidsKg ? animal.poidsKg + ' kg' : 'Non renseigné' }}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+</div>
