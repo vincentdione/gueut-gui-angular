@@ -1,68 +1,90 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <h1>Inscription</h1>
-
-    @if (error) {
-      <div class="error-message">{{ error }}</div>
-    }
-
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="nom">Nom complet</label>
-        <input
-          type="text"
-          id="nom"
-          name="nom"
-          [(ngModel)]="nom"
-          required
-          placeholder="Jean Dupont"
-        />
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
+  <div style="width: 100%; max-width: 420px;">
+    <div class="card-static p-8 animate-fade-in">
+      <!-- Logo -->
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 64px; height: 64px; background: linear-gradient(135deg, var(--color-primary-500) 0%, #059669 100%); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);">
+          🐑
+        </div>
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-slate-900); font-family: var(--font-display); margin-bottom: 0.5rem;">
+          Créer un compte 🚀
+        </h1>
+        <p style="color: var(--color-slate-500);">Rejoignez SheepFarm</p>
       </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          [(ngModel)]="email"
-          required
-          placeholder="votre@email.com"
-        />
+      <!-- Alert -->
+      @if (error) {
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--color-error-bg); border: 1px solid #fecaca; border-radius: var(--radius-xl); margin-bottom: 1.5rem;">
+          <span style="font-size: 1.25rem;">⚠️</span>
+          <p style="font-size: 0.875rem;">{{ error }}</p>
+        </div>
+      }
+
+      <!-- Form -->
+      <form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div>
+          <label style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-slate-700); margin-bottom: 0.375rem;">Nom complet</label>
+          <input type="text" [(ngModel)]="nom" name="nom" required placeholder="Jean Dupont" class="form-input">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-slate-700); margin-bottom: 0.375rem;">Email</label>
+          <input type="email" [(ngModel)]="email" name="email" required placeholder="vous@email.com" class="form-input">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-slate-700); margin-bottom: 0.375rem;">Mot de passe</label>
+          <input type="password" [(ngModel)]="password" name="password" required placeholder="Min. 8 caractères" class="form-input">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--color-slate-700); margin-bottom: 0.375rem;">Confirmer</label>
+          <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required placeholder="Confirmez" class="form-input">
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem;">
+          <input type="checkbox" style="width: 16px; height: 16px; margin-top: 0.125rem; border-radius: var(--radius-sm); border: 1px solid var(--color-slate-300);">
+          <span style="color: var(--color-slate-600);">
+            J'accepte les
+            <a href="#" style="color: var(--color-primary-600);">conditions</a>
+            et la
+            <a href="#" style="color: var(--color-primary-600);">confidentialité</a>
+          </span>
+        </div>
+
+        <button type="submit" [disabled]="loading" class="btn btn-primary" style="padding: 0.875rem;">
+          {{ loading ? 'Inscription...' : 'Créer mon compte' }}
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div style="position: relative; margin: 1.5rem 0;">
+        <div style="position: absolute; inset: 0; display: flex; align-items: center;">
+          <div style="width: 100%; height: 1px; background: var(--color-slate-200);"></div>
+        </div>
+        <div style="position: relative; display: flex; justify-content: center;">
+          <span style="padding: 0 1rem; background: white; color: var(--color-slate-500); font-size: 0.875rem;">ou</span>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="password"
-          required
-          placeholder="Min. 8 caractères"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="confirmPassword">Confirmer</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          required
-          placeholder="Confirmez votre mot de passe"
-        />
-      </div>
-
-      <button type="submit" [disabled]="loading">
-        {{ loading ? 'Inscription...' : "S'inscrire" }}
+      <!-- Social -->
+      <button class="btn btn-secondary" style="padding: 0.875rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        </svg>
+        S'inscrire avec Google
       </button>
-    </form>
 
-    <p class="auth-link">
-      Déjà inscrit ?
-      <a routerLink="/auth/login">Connectez-vous</a>
-    </p>
+      <!-- Footer -->
+      <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-slate-100); text-align: center;">
+        <p style="font-size: 0.875rem; color: var(--color-slate-500);">
+          Déjà inscrit ?
+          <a routerLink="/auth/login" style="color: var(--color-primary-600); font-weight: 600; margin-left: 0.25rem;">
+            Se connecter
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
 </div>

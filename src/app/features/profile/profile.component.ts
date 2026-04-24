@@ -6,16 +6,22 @@ import { RouterLink } from '@angular/router';
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+  templateUrl: './profile.component.html'
 })
 export class ProfileComponent {
   user = {
     nom: 'Jean Dupont',
     email: 'jean@example.com',
     telephone: '06 12 34 56 78',
-    localisation: 'Bordeaux, France',
-    certification: 'BRONZE',
+    localisation: 'Beauce, France',
+    certification: 'Premium',
     createdAt: new Date('2024-01-15'),
+  };
+  
+  stats = {
+    totalAnimals: 42,
+    totalSales: 156,
+    rating: 4.8,
+    reviews: 240
   };
 }

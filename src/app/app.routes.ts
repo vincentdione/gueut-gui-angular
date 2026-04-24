@@ -1,8 +1,10 @@
-export const routes = [
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
-    pathMatch: 'full',
+    pathMatch: 'full' as const,
   },
   {
     path: 'auth',

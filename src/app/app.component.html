@@ -1,36 +1,126 @@
-<div class="app-container">
-  <header class="app-header">
-    <div class="header-content">
-      <a routerLink="/" class="logo">
-        <span class="logo-icon">🐑</span>
-        <span class="logo-text">Gueut-Gui</span>
-      </a>
-
-      <nav class="nav-links">
-        <a routerLink="/marketplace" routerLinkActive="active">Marché</a>
-
-        @if (isLoggedIn) {
-          <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
-          <a routerLink="/animals" routerLinkActive="active">Mes Animaux</a>
-          <a routerLink="/profile" routerLinkActive="active" class="user-link">
-            {{ userName }}
-          </a>
-          <button (click)="logout()" class="btn-logout">Déconnexion</button>
-        } @else {
-          <a routerLink="/auth/login" routerLinkActive="active">Connexion</a>
-          <a routerLink="/auth/register" routerLinkActive="active" class="btn-register">
-            Inscription
-          </a>
-        }
-      </nav>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="app-sidebar" [class.open]="sidebarOpen">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🐑</div>
+      <span class="sidebar-logo-text">SheepFarm</span>
     </div>
-  </header>
+    
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <p class="sidebar-section-title">Menu</p>
+        
+        <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-link">
+          <span class="sidebar-link-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        
+        <a routerLink="/animals" routerLinkActive="active" class="sidebar-link">
+          <span class="sidebar-link-icon">🐑</span>
+          <span>Mes Animaux</span>
+        </a>
+        
+        <a routerLink="/marketplace" routerLinkActive="active" class="sidebar-link">
+          <span class="sidebar-link-icon">🏪</span>
+          <span>Marketplace</span>
+        </a>
+      </div>
+      
+      <div class="sidebar-section">
+        <p class="sidebar-section-title">Compte</p>
+        
+        <a routerLink="/profile" routerLinkActive="active" class="sidebar-link">
+          <span class="sidebar-link-icon">👤</span>
+          <span>Mon Profil</span>
+        </a>
+        
+        <a href="#" class="sidebar-link">
+          <span class="sidebar-link-icon">⚙️</span>
+          <span>Paramètres</span>
+        </a>
+      </div>
+    </nav>
+    
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <div class="p-4 rounded-xl" style="background: linear-gradient(135deg, var(--color-primary-500) 0%, #7c3aed 100%);">
+        <p class="font-medium text-white text-sm mb-3">Passez à Premium</p>
+        <button class="btn btn-sm w-full" style="background: rgba(255,255,255,0.2); color: white;">
+          Débloquer plus
+        </button>
+      </div>
+    </div>
+  </aside>
 
-  <main class="app-main">
-    <router-outlet />
-  </main>
+  <!-- Main Content -->
+  <div class="app-main">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Mobile Menu -->
+        <button class="header-btn lg:hidden" (click)="sidebarOpen = !sidebarOpen">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        
+        <!-- Search -->
+        <div class="header-search">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Rechercher un animal, une race...">
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="header-actions">
+          <button class="header-btn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="header-btn-badge"></span>
+          </button>
+          
+          <!-- User Menu -->
+          <div class="header-user" (click)="userMenuOpen = !userMenuOpen">
+            <div class="header-avatar">{{ userInitials }}</div>
+            <span class="header-user-name">{{ userName }}</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+          
+          <!-- Dropdown -->
+          @if (userMenuOpen) {
+            <div class="card-static p-2" style="position: absolute; top: 56px; right: 24px; min-width: 200px; z-index: 100;">
+              <a routerLink="/profile" class="sidebar-link">
+                <span>👤</span> Mon Profil
+              </a>
+              <a routerLink="/animals/new" class="sidebar-link">
+                <span>➕</span> Ajouter un animal
+              </a>
+              <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid var(--color-slate-100);">
+              <button class="sidebar-link w-full text-error" (click)="logout()">
+                <span>🚪</span> Déconnexion
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
 
-  <footer class="app-footer">
-    <p>© 2026 Gueut-Gui - Plateforme d'élevage de moutons</p>
-  </footer>
+    <!-- Page Content -->
+    <div class="app-content">
+      <div class="app-page">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Overlay -->
+  @if (sidebarOpen) {
+    <div class="fixed inset-0 bg-black/50 z-40 lg:hidden" (click)="sidebarOpen = false"></div>
+  }
 </div>

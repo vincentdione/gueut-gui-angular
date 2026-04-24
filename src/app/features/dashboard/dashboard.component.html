@@ -1,51 +1,143 @@
-<div class="dashboard">
-  <header class="dashboard-header">
-    <h1>Bienvenue, {{ userName }}</h1>
-    <p class="subtitle">Gérez vos animaux et consultez le marché</p>
-  </header>
+<div class="page-header animate-fade-in">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 class="page-title">Bonjour, <span class="text-primary">{{ userName }}</span> 👋</h1>
+      <p class="page-subtitle">Voici un aperçu de votre exploitation aujourd'hui</p>
+    </div>
+    <a routerLink="/animals/new" class="btn btn-primary">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      Ajouter un mouton
+    </a>
+  </div>
+</div>
 
-  <section class="stats-section">
-    <h2>Mes Statistiques</h2>
-    <div class="stats-grid">
-      @for (stat of stats; track stat.label) {
-        <div class="stat-card" [style.--accent-color]="stat.color">
-          <span class="stat-icon">{{ stat.icon }}</span>
-          <div class="stat-content">
-            <span class="stat-value">{{ stat.value }}</span>
-            <span class="stat-label">{{ stat.label }}</span>
+<!-- Stats -->
+<div class="stats-grid stagger-children">
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-primary">🐑</div>
+    <div class="stat-value">{{ stats.total }}</div>
+    <div class="stat-label">Total moutons</div>
+    <div class="stat-trend stat-trend-up">↑ +5 ce mois</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #fef3c7; color: #d97706;">💕</div>
+    <div class="stat-value">{{ stats.breeding }}</div>
+    <div class="stat-label">En reproduction</div>
+    <div class="stat-trend stat-trend-up">↑ +2 ce mois</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-warning">💰</div>
+    <div class="stat-value">{{ stats.forSale }}</div>
+    <div class="stat-label">À vendre</div>
+    <div class="stat-trend stat-trend-down">↓ -1 ce mois</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-success">❤️</div>
+    <div class="stat-value" style="color: var(--color-success);">Excellente</div>
+    <div class="stat-label">Santé du troupeau</div>
+    <div class="stat-trend stat-trend-up">↑ +8% santé</div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card-static p-6" style="margin-top: 1.5rem;">
+  <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 1.25rem;">
+    Actions rapides
+  </h2>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+    <a routerLink="/animals/new" class="sidebar-link" style="flex-direction: column; padding: 1.25rem; text-align: center; background: var(--color-slate-50); border-radius: var(--radius-xl);">
+      <span style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎂</span>
+      <span style="font-weight: 500;">Naissance</span>
+    </a>
+    <a routerLink="/animals" class="sidebar-link" style="flex-direction: column; padding: 1.25rem; text-align: center; background: var(--color-slate-50); border-radius: var(--radius-xl);">
+      <span style="font-size: 1.5rem; margin-bottom: 0.5rem;">📋</span>
+      <span style="font-weight: 500;">Mes animaux</span>
+    </a>
+    <a routerLink="/marketplace" class="sidebar-link" style="flex-direction: column; padding: 1.25rem; text-align: center; background: var(--color-slate-50); border-radius: var(--radius-xl);">
+      <span style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛒</span>
+      <span style="font-weight: 500;">Marché</span>
+    </a>
+    <a routerLink="/profile" class="sidebar-link" style="flex-direction: column; padding: 1.25rem; text-align: center; background: var(--color-slate-50); border-radius: var(--radius-xl);">
+      <span style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</span>
+      <span style="font-weight: 500;">Statistiques</span>
+    </a>
+  </div>
+</div>
+
+<!-- Recent Animals -->
+<div class="card-static p-6" style="margin-top: 1.5rem;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800);">
+      Derniers animaux ajoutés
+    </h2>
+    <a routerLink="/animals" class="btn btn-ghost btn-sm">
+      Voir tout →
+    </a>
+  </div>
+
+  @if (recentAnimals.length > 0) {
+    <div class="animals-grid">
+      @for (animal of recentAnimals; track animal.id) {
+        <a [routerLink]="['/animals', animal.id]" class="animal-card">
+          <div class="animal-card-image">
+            <img [src]="animal.imageUrl || defaultImage" [alt]="animal.nom">
+            @if (animal.aVente) {
+              <span class="badge badge-success animal-card-badge">À vendre</span>
+            }
           </div>
-        </div>
+          <div class="animal-card-body">
+            <h3 class="animal-card-name">{{ animal.nom }}</h3>
+            <p class="animal-card-breed">{{ animal.race }}</p>
+            <div class="animal-card-meta">
+              <span class="animal-card-meta-item">
+                📅 {{ animal.dateNaiss | date:'shortDate' }}
+              </span>
+              <span class="animal-card-meta-item" [style.color]="animal.sexe === 'M' ? 'var(--color-info)' : '#ec4899'">
+                {{ animal.sexe === 'M' ? '♂ M' : '♀ F' }}
+              </span>
+            </div>
+          </div>
+        </a>
       }
     </div>
-  </section>
-
-  <section class="actions-section">
-    <h2>Actions Rapides</h2>
-    <div class="actions-grid">
-      <a routerLink="/animals/new" class="action-card primary">
-        <span class="action-icon">➕</span>
-        <span class="action-text">Ajouter un animal</span>
-      </a>
-      <a routerLink="/animals" class="action-card">
-        <span class="action-icon">📋</span>
-        <span class="action-text">Mes animaux</span>
-      </a>
-      <a routerLink="/marketplace" class="action-card">
-        <span class="action-icon">🛒</span>
-        <span class="action-text">Marché</span>
-      </a>
-      <a routerLink="/profile" class="action-card">
-        <span class="action-icon">👤</span>
-        <span class="action-text">Mon profil</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="recent-section">
-    <h2>Activité Récente</h2>
+  } @else {
     <div class="empty-state">
-      <p>Aucune activité récente</p>
-      <a routerLink="/animals/new">Commencez en ajoutant votre premier animal</a>
+      <div class="empty-state-icon">🐑</div>
+      <h3 class="empty-state-title">Aucun mouton enregistré</h3>
+      <p class="empty-state-text">Commencez par ajouter votre premier mouton</p>
+      <a routerLink="/animals/new" class="btn btn-primary">Ajouter un mouton</a>
     </div>
-  </section>
+  }
+</div>
+
+<!-- Upcoming Events -->
+<div class="card-static p-6" style="margin-top: 1.5rem;">
+  <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 1.25rem;">
+    Événements à venir
+  </h2>
+
+  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--color-warning-bg); border: 1px solid #fde68a; border-radius: var(--radius-xl);">
+      <div style="width: 40px; height: 40px; background: #fef3c7; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">💉</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; color: var(--color-slate-800);">Vaccination DTP - Belle</p>
+        <p style="font-size: 0.875rem; color: var(--color-slate-500);">Prévue dans 3 jours</p>
+      </div>
+      <span class="badge badge-warning">Urgent</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--color-primary-50); border: 1px solid var(--color-primary-200); border-radius: var(--radius-xl);">
+      <div style="width: 40px; height: 40px; background: var(--color-primary-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">⚕️</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; color: var(--color-slate-800);">Visite vétérinéaire</p>
+        <p style="font-size: 0.875rem; color: var(--color-slate-500);">Prévue dans 2 semaines</p>
+      </div>
+      <span class="badge badge-primary">Planifié</span>
+    </div>
+  </div>
 </div>

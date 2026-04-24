@@ -1,42 +1,96 @@
-<div class="marketplace">
-  <header class="marketplace-header">
-    <h1>🐑 Marché aux Animaux</h1>
-    <p class="subtitle">Trouvez vos prochains élevages de qualité</p>
-  </header>
+<div class="page-header animate-fade-in">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 class="page-title">Marketplace 🏪</h1>
+      <p class="page-subtitle">Trouvez le mouton parfait</p>
+    </div>
+  </div>
+</div>
 
-  <section class="filters-section">
-    <div class="search-box">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Rechercher un animal..."
-        class="search-input"
-      />
+<!-- Stats Banner -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-primary">🐑</div>
+    <div class="stat-value">156</div>
+    <div class="stat-label">Annonces actives</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-success">⭐</div>
+    <div class="stat-value">4.8</div>
+    <div class="stat-label">Note moyenne</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-info">🚚</div>
+    <div class="stat-value">94%</div>
+    <div class="stat-label">Livraisons OK</div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="card-static p-4" style="margin-bottom: 1.5rem;">
+  <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+    <!-- Search -->
+    <div style="flex: 1; min-width: 200px;">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Rechercher une race, un nom..." [(ngModel)]="searchQuery">
+      </div>
     </div>
 
-    <div class="filter-group">
-      <select [(ngModel)]="selectedRace" class="filter-select">
-        @for (race of races; track race.value) {
-          <option [value]="race.value">{{ race.label }}</option>
-        }
-      </select>
+    <!-- Select Race -->
+    <select class="form-input form-select" style="width: auto; min-width: 150px;">
+      <option value="">Toutes les races</option>
+      <option value="merinos">Mérinos</option>
+      <option value="charolais">Charolais</option>
+      <option value="solognot">Solognot</option>
+    </select>
 
-      <select [(ngModel)]="selectedSexe" class="filter-select">
-        @for (sexe of sexes; track sexe.value) {
-          <option [value]="sexe.value">{{ sexe.label }}</option>
-        }
-      </select>
+    <!-- Price Range -->
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="font-size: 0.875rem; color: var(--color-slate-500);">Prix max:</span>
+      <input type="range" min="500" max="5000" step="100" [(ngModel)]="maxPrice" style="width: 120px; accent-color: var(--color-primary-500);">
+      <span style="font-size: 0.875rem; font-weight: 500; color: var(--color-slate-700);">{{ maxPrice }}€</span>
     </div>
-  </section>
+  </div>
+</div>
 
-  <section class="results-section">
-    <div class="empty-state">
-      <div class="empty-icon">🐑</div>
-      <h3>Aucun animal en vente</h3>
-      <p>Les annonces apparaîtront ici lorsqu'elles seront publiées.</p>
-      <a routerLink="/auth/register" class="cta-link">
-        Inscrivez-vous pour vendre vos animaux
-      </a>
+<!-- Listings Grid -->
+<div class="animals-grid stagger-children">
+  @for (listing of listings; track listing.id) {
+    <div class="animal-card">
+      <div class="animal-card-image">
+        <img [src]="listing.image" [alt]="listing.name">
+        <span class="badge badge-success animal-card-badge">À vendre</span>
+      </div>
+      <div class="animal-card-body">
+        <h3 class="animal-card-name">{{ listing.name }}</h3>
+        <p class="animal-card-breed">{{ listing.breed }}</p>
+        
+        <!-- Seller -->
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--color-slate-100);">
+          <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--color-primary-500) 0%, #7c3aed 100%); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600;">
+            {{ listing.breeder.charAt(0) }}
+          </div>
+          <div>
+            <p style="font-weight: 500; color: var(--color-slate-800); font-size: 0.875rem;">{{ listing.breeder }}</p>
+            <p style="font-size: 0.75rem; color: var(--color-slate-500);">📍 {{ listing.location }}</p>
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+          <span style="color: #f59e0b;">
+            @for (star of getStars(listing.rating); track $index) { ⭐ }
+          </span>
+          <span style="font-size: 0.75rem; color: var(--color-slate-500);">{{ listing.rating }}/5 ({{ listing.reviews }} avis)</span>
+        </div>
+
+        <!-- Price & CTA -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-slate-100);">
+          <span style="font-size: 1.5rem; font-weight: 700; color: var(--color-primary-600);">{{ listing.price }}€</span>
+          <button class="btn btn-primary btn-sm">Voir</button>
+        </div>
+      </div>
     </div>
-  </section>
+  }
 </div>

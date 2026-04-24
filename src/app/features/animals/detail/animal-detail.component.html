@@ -1,41 +1,207 @@
-<div class="animal-detail">
-  <a routerLink="/animals" class="back-link">
-    ← Retour à mes animaux
+<!-- Back & Actions -->
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;" class="animate-fade-in">
+  <a routerLink="/animals" class="btn btn-ghost">
+    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    Retour
   </a>
+  <div style="display: flex; gap: 0.5rem;">
+    <button class="btn btn-secondary">Modifier</button>
+    <button class="btn btn-ghost">Partager</button>
+  </div>
+</div>
 
-  @if (!animal) {
-    <div class="loading">
-      <p>Chargement des détails...</p>
+<!-- Main Grid -->
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+  <!-- Left Column - Photo & Info -->
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <!-- Photo -->
+    <div class="card-static p-4">
+      <div style="aspect-ratio: 1; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-slate-100);">
+        <img [src]="animal.imageUrl" [alt]="animal.nom" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
     </div>
-  } @else {
-    <div class="detail-content">
-      <header class="detail-header">
-        <div class="animal-image">
-          <span class="placeholder-icon">🐑</span>
-        </div>
-        <div class="animal-info">
-          <h1>{{ animal.nom }}</h1>
-          <p class="race">{{ animal.race }}</p>
-        </div>
-      </header>
 
-      <section class="info-section">
-        <h2>Informations</h2>
-        <div class="info-grid">
-          <div class="info-item">
-            <span class="label">Sexe</span>
-            <span class="value">{{ animal.sexe }}</span>
+    <!-- Quick Info -->
+    <div class="card-static p-6">
+      <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-slate-900);">{{ animal.nom }}</h1>
+        <p style="color: var(--color-slate-500);">{{ animal.race }}</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--color-slate-500);">Âge</span>
+          <span style="font-weight: 500; color: var(--color-slate-800);">{{ getAge() }} ans</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--color-slate-500);">Sexe</span>
+          <span class="badge" [style.background]="animal.sexe === 'F' ? '#fce7f3' : '#dbeafe'" [style.color]="animal.sexe === 'F' ? '#db2777' : '#2563eb'">
+            {{ animal.sexe === 'M' ? '♂ Mâle' : '♀ Femelle' }}
+          </span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--color-slate-500);">Poids</span>
+          <span style="font-weight: 500; color: var(--color-slate-800);">{{ animal.poids }} kg</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--color-slate-500);">Statut</span>
+          <span class="badge" [class]="animal.aVente ? 'badge-success' : 'badge-primary'">
+            {{ animal.aVente ? 'À vendre' : 'Actif' }}
+          </span>
+        </div>
+      </div>
+
+      <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--color-slate-100);">
+
+      <p style="font-size: 0.9375rem; color: var(--color-slate-600);">{{ animal.description }}</p>
+    </div>
+  </div>
+
+  <!-- Right Column - Tabs -->
+  <div>
+    <!-- Tabs -->
+    <div style="display: flex; gap: 0.5rem; padding: 0.5rem; background: var(--color-slate-100); border-radius: var(--radius-xl); margin-bottom: 1.5rem;">
+      <button (click)="activeTab = 'info'" class="btn" [style.flex]="'1'" [style.background]="activeTab === 'info' ? 'white' : 'transparent'" [style.box-shadow]="activeTab === 'info' ? 'var(--shadow-sm)' : 'none'">
+        ℹ️ Infos
+      </button>
+      <button (click)="activeTab = 'genealogy'" class="btn" [style.flex]="'1'" [style.background]="activeTab === 'genealogy' ? 'white' : 'transparent'" [style.box-shadow]="activeTab === 'genealogy' ? 'var(--shadow-sm)' : 'none'">
+        🌳 Généalogie
+      </button>
+      <button (click)="activeTab = 'health'" class="btn" [style.flex]="'1'" [style.background]="activeTab === 'health' ? 'white' : 'transparent'" [style.box-shadow]="activeTab === 'health' ? 'var(--shadow-sm)' : 'none'">
+        ❤️ Santé
+      </button>
+    </div>
+
+    <!-- Tab: Info -->
+    @if (activeTab === 'info') {
+      <div class="card-static p-6">
+        <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 1.25rem;">
+          Informations complète
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem;">
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Identifiant</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">#{{ animal.id }}</p>
           </div>
-          <div class="info-item">
-            <span class="label">Date de naissance</span>
-            <span class="value">{{ animal.dateNaissance || 'Non renseignée' }}</span>
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Date de naissance</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">{{ animal.dateNaiss | date:'longDate' }}</p>
           </div>
-          <div class="info-item">
-            <span class="label">Poids</span>
-            <span class="value">{{ animal.poidsKg ? animal.poidsKg + ' kg' : 'Non renseigné' }}</span>
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Ajouté le</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">{{ animal.createdAt | date:'longDate' }}</p>
+          </div>
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Dernière mise à jour</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">{{ animal.updatedAt | date:'longDate' }}</p>
           </div>
         </div>
-      </section>
-    </div>
-  }
+
+        <h3 style="font-size: 1rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 1rem;">
+          Parents
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Père</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">{{ animal.pere || 'Non renseigné' }}</p>
+          </div>
+          <div class="stat-card" style="padding: 1rem;">
+            <p style="font-size: 0.75rem; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Mère</p>
+            <p style="font-weight: 600; color: var(--color-slate-800);">{{ animal.mere || 'Non renseignée' }}</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Genealogy -->
+    @if (activeTab === 'genealogy') {
+      <div class="card-static p-6">
+        <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 2rem;">
+          Arbre généalogique
+        </h2>
+
+        <!-- Tree Visual -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+          <!-- Generation 1: Grandparents -->
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-slate-50); border-radius: var(--radius-xl); min-width: 100px;">
+              <div style="width: 36px; height: 36px; background: var(--color-slate-200); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🧑</div>
+              <span style="font-size: 0.75rem; color: var(--color-slate-500);">GP Paternel</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-slate-50); border-radius: var(--radius-xl); min-width: 100px;">
+              <div style="width: 36px; height: 36px; background: var(--color-slate-200); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🧑</div>
+              <span style="font-size: 0.75rem; color: var(--color-slate-500);">GM Paternelle</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-slate-50); border-radius: var(--radius-xl); min-width: 100px;">
+              <div style="width: 36px; height: 36px; background: var(--color-slate-200); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🧑</div>
+              <span style="font-size: 0.75rem; color: var(--color-slate-500);">GP Maternel</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-slate-50); border-radius: var(--radius-xl); min-width: 100px;">
+              <div style="width: 36px; height: 36px; background: var(--color-slate-200); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🧑</div>
+              <span style="font-size: 0.75rem; color: var(--color-slate-500);">GM Maternelle</span>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div style="display: flex; gap: 1rem;">
+            <div style="width: 2px; height: 20px; background: var(--color-slate-300);"></div>
+            <div style="width: 2px; height: 20px; background: var(--color-slate-300);"></div>
+            <div style="width: 2px; height: 20px; background: var(--color-slate-300);"></div>
+            <div style="width: 2px; height: 20px; background: var(--color-slate-300);"></div>
+          </div>
+
+          <!-- Generation 2: Parents -->
+          <div style="display: flex; gap: 2rem; justify-content: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-primary-50); border: 1px solid var(--color-primary-200); border-radius: var(--radius-xl); min-width: 120px;">
+              <div style="width: 40px; height: 40px; background: var(--color-primary-100); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🐑</div>
+              <span style="font-weight: 500; color: var(--color-primary-700);">{{ animal.pere }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: #fce7f3; border: 1px solid #fbcfe8; border-radius: var(--radius-xl); min-width: 120px;">
+              <div style="width: 40px; height: 40px; background: #fce7f3; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">🐑</div>
+              <span style="font-weight: 500; color: #be185d;">{{ animal.mere }}</span>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div style="width: 2px; height: 20px; background: var(--color-slate-300);"></div>
+
+          <!-- Generation 3: Current -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1.25rem; background: linear-gradient(135deg, var(--color-primary-500) 0%, #7c3aed 100%); border-radius: var(--radius-xl); min-width: 140px;">
+            <div style="width: 48px; height: 48px; background: white; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🐑</div>
+            <span style="font-weight: 700; color: white;">{{ animal.nom }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Health -->
+    @if (activeTab === 'health') {
+      <div class="card-static p-6">
+        <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--color-slate-800); margin-bottom: 1.5rem;">
+          Historique medical
+        </h2>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          @for (event of healthEvents; track event.date) {
+            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--color-slate-50); border-radius: var(--radius-xl);">
+              <div style="width: 40px; height: 40px; background: var(--color-primary-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                {{ event.icon }}
+              </div>
+              <div style="flex: 1;">
+                <p style="font-weight: 500; color: var(--color-slate-800);">{{ event.title }}</p>
+                <p style="font-size: 0.875rem; color: var(--color-slate-500);">{{ event.date | date:'mediumDate' }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <button class="btn btn-secondary w-full" style="margin-top: 1.5rem;">
+          + Ajouter un événement
+        </button>
+      </div>
+    }
+  </div>
 </div>
